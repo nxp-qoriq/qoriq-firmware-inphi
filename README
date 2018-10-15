@@ -1,0 +1,39 @@
+
+---- Steps to flash IN112525 Phy firmware on Bank 0 ----
+
+1. Tftp firmware on DDR
+
+=>tftp 80000000 in112525-phy-ucode.txt
+
+2. Flash firmware on current bank
+
+=>i2c mw 66 50 00;sf probe 0:0; sf erase 980000 +2000;sf write 80000000 980000 2000;
+
+
+---- Steps to flash IN112525 Phy firmware on Bank 1 ----
+
+1. Tftp firmware on DDR
+
+=>tftp 80000000 in112525-phy-ucode.txt
+
+2. Flash firmware on alternate bank
+
+=>i2c mw 66 50 20;sf probe 0:0; sf erase 980000 +2000;sf write 80000000 980000 2000;
+
+
+
+You can check if in112525 phy is initialized or not with random read of some registers.
+
+=> mdio list
+It will give you the mac name <dpmac_name> corresponding to Inphi Phy.
+
+=> mdio read <dpmac_name> 0x1e.f0
+Reading from bus FSL_MDIO1
+PHY at address 0:
+30.240 - 0xa000
+
+=> mdio read <dpmac_name> 0x1e.73f
+Reading from bus FSL_MDIO1
+PHY at address 0:
+30.1855 - 0x1880
+
